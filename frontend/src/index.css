@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+:root {
+  --bg-dark: #1A0A06;
+  --bg-card: #431407;
+  --text-main: #FDE8DC;
+  --text-muted: #B38A7C;
+  --accent: #E25D30;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.scanline {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(226, 93, 48, 0.05) 50%,
+    transparent 100%
+  );
+  background-size: 100% 4px;
+  animation: scan 4s linear infinite;
+}
+
+@keyframes scan {
+  from { background-position: 0 0; }
+  to { background-position: 0 100%; }
+}
+
