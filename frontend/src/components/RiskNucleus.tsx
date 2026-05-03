@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -57,6 +57,9 @@ const RiskNucleus: React.FC<RiskNucleusProps> = ({ riskScore }) => {
   const color = getColor(riskScore);
   const intensity = getIntensity(riskScore);
 
+  const trackShape = useMemo(() => createArcShape(100), []);
+  const fillShape = useMemo(() => createArcShape(riskScore), [riskScore]);
+
   return (
     <group position={[0, 0, 0]}>
       {/* The Core: Pulsing Orb */}
@@ -74,12 +77,12 @@ const RiskNucleus: React.FC<RiskNucleusProps> = ({ riskScore }) => {
       <group ref={ringRef}>
         {/* Background Track */}
         <mesh>
-          <extrudeGeometry args={[createArcShape(100), { depth: 0.1, bevelEnabled: false }]} />
+          <extrudeGeometry args={[trackShape, { depth: 0.1, bevelEnabled: false }]} />
           <meshStandardMaterial color="#2d0a05" transparent opacity={0.5} />
         </mesh>
         {/* Active Fill Arc */}
         <mesh>
-          <extrudeGeometry args={[createArcShape(riskScore), { depth: 0.15, bevelEnabled: false }]} />
+          <extrudeGeometry args={[fillShape, { depth: 0.15, bevelEnabled: false }]} />
           <meshStandardMaterial 
             color={color} 
             emissive={color} 

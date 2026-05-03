@@ -6,18 +6,20 @@ interface EmberParticlesProps {
   riskScore: number;
 }
 
+const createRandomPositions = (count: number) => {
+  const pos = new Float32Array(count * 3);
+  for (let i = 0; i < count * 3; i++) {
+    pos[i] = (Math.random() - 0.5) * 20;
+  }
+  return pos;
+};
+
 const EmberParticles: React.FC<EmberParticlesProps> = ({ riskScore }) => {
   const pointsRef = useRef<THREE.Points>(null);
   
   // Create random positions for particles
   const particleCount = 200;
-  const positions = useMemo(() => {
-    const pos = new Float32Array(particleCount * 3);
-    for (let i = 0; i < particleCount * 3; i++) {
-      pos[i] = (Math.random() - 0.5) * 20;
-    }
-    return pos;
-  }, []);
+  const positions = useMemo(() => createRandomPositions(particleCount), []);
 
   useFrame((state) => {
     if (pointsRef.current) {
@@ -44,14 +46,12 @@ const EmberParticles: React.FC<EmberParticlesProps> = ({ riskScore }) => {
 
   return (
     <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute 
-          attach="attributes-position" 
-          count={particleCount} 
-          array={positions} 
-          itemSize={3} 
-        />
-      </bufferGeometry>
+       <bufferGeometry>
+         <bufferAttribute 
+           attach="attributes-position" 
+           args={[positions, 3]}
+         />
+       </bufferGeometry>
       <pointsMaterial 
         size={0.05} 
         color="#E25D30" 

@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { useFrame } from '@react-three/fiber';
 import { Text, ContactShadows } from '@react-three/drei';
-import * as THREE from 'three';
 
 interface SHAPBarForestProps {
   data: [string, number][]; // Array of [FeatureName, Importance]

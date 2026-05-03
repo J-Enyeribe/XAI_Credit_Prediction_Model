@@ -1,0 +1,338 @@
+
+<h2 class="sr-only">XAI credit risk site flow storyboard — three screens with transitions</h2>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.flow{padding:1rem 0}
+.screen-row{display:flex;gap:0;align-items:stretch;margin-bottom:2rem}
+.screen{flex:1;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.screen-num{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-tertiary);font-weight:500;padding:10px 14px 0}
+.screen-title{font-size:13px;font-weight:500;color:var(--color-text-primary);padding:2px 14px 10px}
+.preview{height:200px;position:relative;overflow:hidden}
+.arrow-col{display:flex;align-items:center;justify-content:center;padding:0 8px;flex-shrink:0;padding-top:48px}
+.arrow-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
+.arrow-label{font-size:9px;color:var(--color-text-tertiary);text-align:center;white-space:nowrap}
+.arrow-line{width:32px;height:1px;background:var(--color-border-secondary);position:relative}
+.arrow-line::after{content:'';position:absolute;right:-1px;top:-3px;border-left:5px solid var(--color-border-secondary);border-top:3.5px solid transparent;border-bottom:3.5px solid transparent}
+.screen-body{padding:10px 14px 14px;border-top:0.5px solid var(--color-border-tertiary)}
+.detail-label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:6px;margin-top:10px}
+.detail-label:first-child{margin-top:0}
+.detail-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:2px}
+.chip{font-size:10px;padding:2px 8px;border-radius:20px;border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary)}
+.chip-accent{font-size:10px;padding:2px 8px;border-radius:20px;background:#EEEDFE;color:#3C3489;border:0.5px solid #AFA9EC}
+.chip-teal{font-size:10px;padding:2px 8px;border-radius:20px;background:#E1F5EE;color:#0F6E56;border:0.5px solid #5DCAA5}
+.chip-amber{font-size:10px;padding:2px 8px;border-radius:20px;background:#FAEEDA;color:#633806;border:0.5px solid #EF9F27}
+@media (prefers-color-scheme:dark){
+  .chip-accent{background:#3C3489;color:#CECBF6;border-color:#534AB7}
+  .chip-teal{background:#085041;color:#9FE1CB;border-color:#1D9E75}
+  .chip-amber{background:#633806;color:#FAC775;border-color:#BA7517}
+}
+.timeline{display:flex;gap:0;margin-bottom:2rem;position:relative}
+.tl-item{flex:1;padding:0 8px;position:relative}
+.tl-item:first-child{padding-left:0}
+.tl-item:last-child{padding-right:0}
+.tl-dot{width:10px;height:10px;border-radius:50%;background:#7F77DD;border:2px solid var(--color-background-primary);position:relative;z-index:2;margin-bottom:6px}
+.tl-line{position:absolute;top:4px;left:50%;right:-50%;height:1px;background:var(--color-border-secondary);z-index:1}
+.tl-item:last-child .tl-line{display:none}
+.tl-name{font-size:10px;font-weight:500;color:var(--color-text-primary)}
+.tl-time{font-size:9px;color:var(--color-text-tertiary)}
+.tl-desc{font-size:10px;color:var(--color-text-secondary);line-height:1.5;margin-top:2px}
+.section-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-tertiary);font-weight:500;margin-bottom:10px}
+.code-block{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;font-family:var(--font-mono);font-size:10px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:12px}
+.kw{color:#7F77DD}
+.str{color:#1D9E75}
+.fn{color:#BA7517}
+
+/* Screen 1 — Intro */
+.s1-bg{background:#050B18;width:100%;height:100%}
+.s1-star{position:absolute;border-radius:50%;background:rgba(255,255,255,0.7)}
+.s1-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.s1-line{width:1px;height:28px;background:rgba(99,179,237,0.4);margin-bottom:10px}
+.s1-proj{font-size:8px;color:#63B3ED;letter-spacing:.2em;text-transform:uppercase;margin-bottom:4px}
+.s1-name{font-size:18px;font-weight:500;color:#EBF8FF;letter-spacing:-0.5px;line-height:1.1;text-align:center}
+.s1-dev{font-size:8px;color:rgba(255,255,255,0.35);margin-top:8px;letter-spacing:.1em}
+.s1-orb{width:50px;height:50px;border-radius:50%;background:#1A56DB;position:absolute;right:20px;bottom:20px;opacity:.3}
+.s1-ring1{width:70px;height:70px;border-radius:50%;border:0.5px solid rgba(99,179,237,0.15);position:absolute;right:10px;bottom:10px}
+.s1-ring2{width:90px;height:90px;border-radius:50%;border:0.5px solid rgba(99,179,237,0.08);position:absolute;right:0px;bottom:0px}
+.s1-bar{width:40px;height:1px;background:rgba(99,179,237,0.4);margin-top:10px}
+
+/* Screen 2 — Landing */
+.s2-bg{background:#07080F;width:100%;height:100%}
+.s2-header{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:center}
+.s2-logo{font-size:9px;font-weight:500;color:#EBF8FF;letter-spacing:.05em}
+.s2-nav{display:flex;gap:10px}
+.s2-nav span{font-size:7px;color:rgba(255,255,255,0.35)}
+.s2-hero{position:absolute;left:12px;right:12px;top:40px;bottom:50px;display:flex;flex-direction:column;justify-content:center}
+.s2-tag{font-size:7px;color:#63B3ED;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px}
+.s2-h1{font-size:14px;font-weight:500;color:#EBF8FF;line-height:1.2;letter-spacing:-.3px}
+.s2-sub{font-size:8px;color:rgba(255,255,255,0.4);line-height:1.5;margin-top:5px;max-width:160px}
+.s2-btn{display:inline-block;margin-top:10px;font-size:7px;padding:4px 10px;border:0.5px solid rgba(99,179,237,0.5);color:#63B3ED;border-radius:20px}
+.s2-cards{position:absolute;right:12px;top:36px;bottom:12px;width:105px;display:flex;flex-direction:column;gap:5px}
+.s2-card{background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);border-radius:5px;padding:6px 8px}
+.s2-card-label{font-size:6px;color:#63B3ED;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.s2-card-val{font-size:11px;font-weight:500;color:#EBF8FF}
+.s2-card-sub{font-size:6px;color:rgba(255,255,255,0.3);margin-top:1px}
+.s2-sphere{position:absolute;right:-5px;bottom:-10px;width:80px;height:80px;border-radius:50%;background:rgba(26,86,219,0.15);border:0.5px solid rgba(26,86,219,0.2)}
+.s2-dots{position:absolute;bottom:10px;left:12px;display:flex;gap:4px}
+.s2-dot{width:4px;height:4px;border-radius:50%}
+
+/* Screen 3 — Predictor */
+.s3-bg{background:#07080F;width:100%;height:100%}
+.s3-left{position:absolute;left:0;top:0;bottom:0;width:48%;border-right:0.5px solid rgba(255,255,255,0.06);padding:10px}
+.s3-right{position:absolute;right:0;top:0;bottom:0;width:52%;padding:10px}
+.s3-section{font-size:6px;color:rgba(255,255,255,0.25);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;margin-top:6px}
+.s3-section:first-child{margin-top:0}
+.s3-field{display:flex;gap:4px;margin-bottom:3px}
+.s3-input{flex:1;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:3px;padding:3px 5px;font-size:7px;color:rgba(255,255,255,0.6)}
+.s3-orb-wrap{display:flex;justify-content:center;margin-bottom:6px}
+.s3-orb{width:36px;height:36px;border-radius:50%;background:#D85A30;border:1px solid rgba(216,90,48,0.4)}
+.s3-score-row{display:flex;justify-content:space-between;align-items:center;padding:2px 0;border-bottom:0.5px solid rgba(255,255,255,0.05)}
+.s3-feat{font-size:7px;color:rgba(255,255,255,0.4)}
+.s3-val{font-size:7px;font-weight:500;color:#D85A30}
+.s3-val-neg{font-size:7px;font-weight:500;color:#1D9E75}
+.s3-final{display:flex;justify-content:space-between;align-items:center;padding:4px 5px;background:rgba(26,86,219,0.15);border-radius:3px;margin-top:4px}
+.s3-final-label{font-size:7px;font-weight:500;color:#63B3ED}
+.s3-final-val{font-size:9px;font-weight:500;color:#EBF8FF}
+</style>
+
+<div class="flow">
+
+  <p class="section-label">Screen flow &amp; storyboard</p>
+  <div class="screen-row">
+
+    <div class="screen">
+      <div class="screen-num">Screen 01</div>
+      <div class="screen-title">Intro animation</div>
+      <div class="preview">
+        <div class="s1-bg">
+          <div class="s1-ring2"></div>
+          <div class="s1-ring1"></div>
+          <div class="s1-orb"></div>
+          <div class="s1-star" style="width:1.5px;height:1.5px;top:18%;left:15%"></div>
+          <div class="s1-star" style="width:1px;height:1px;top:30%;left:55%"></div>
+          <div class="s1-star" style="width:1.5px;height:1.5px;top:65%;left:30%"></div>
+          <div class="s1-star" style="width:1px;height:1px;top:20%;left:70%"></div>
+          <div class="s1-star" style="width:2px;height:2px;top:75%;left:18%"></div>
+          <div class="s1-star" style="width:1px;height:1px;top:55%;left:45%"></div>
+          <div class="s1-center">
+            <div class="s1-line"></div>
+            <div class="s1-proj">Explainable AI System</div>
+            <div class="s1-name">XAI Credit<br>Risk Scoring</div>
+            <div class="s1-bar"></div>
+            <div class="s1-dev">Justin Enyeribe Ndubuisi · JKUAT · 2026</div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-body">
+        <div class="detail-label">3D scene</div>
+        <div class="detail-row">
+          <span class="chip-accent">Floating star field</span>
+          <span class="chip-accent">Pulsing orb in corner</span>
+        </div>
+        <div class="detail-label">Animation sequence</div>
+        <div class="detail-row">
+          <span class="chip">Stars fade in (0–1s)</span>
+          <span class="chip">Line drops (1s)</span>
+          <span class="chip">Title letter-by-letter (1.5s)</span>
+          <span class="chip">Dev name fades (2.5s)</span>
+          <span class="chip">Auto-advance (4s)</span>
+        </div>
+        <div class="detail-label">Library</div>
+        <div class="detail-row">
+          <span class="chip-teal">R3F Stars (Drei)</span>
+          <span class="chip-teal">Framer Motion text split</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-col">
+      <div class="arrow-wrap">
+        <div class="arrow-line"></div>
+        <div class="arrow-label">camera<br>zoom out</div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-num">Screen 02</div>
+      <div class="screen-title">Landing page</div>
+      <div class="preview">
+        <div class="s2-bg">
+          <div class="s2-sphere"></div>
+          <div class="s2-header">
+            <div class="s2-logo">XAI Credit Risk</div>
+            <div class="s2-nav">
+              <span>About</span><span>Model</span><span>Launch</span>
+            </div>
+          </div>
+          <div class="s2-hero">
+            <div class="s2-tag">BSc Final Year Project · JKUAT</div>
+            <div class="s2-h1">Transparent<br>credit decisions<br>powered by AI</div>
+            <div class="s2-sub">Predicts loan default probability using ensemble ML with SHAP explanations you can actually read.</div>
+            <div class="s2-btn">Launch predictor →</div>
+          </div>
+          <div class="s2-cards">
+            <div class="s2-card">
+              <div class="s2-card-label">Model AUC</div>
+              <div class="s2-card-val">0.91</div>
+              <div class="s2-card-sub">XGBoost champion</div>
+            </div>
+            <div class="s2-card">
+              <div class="s2-card-label">Features</div>
+              <div class="s2-card-val">31</div>
+              <div class="s2-card-sub">After preprocessing</div>
+            </div>
+            <div class="s2-card">
+              <div class="s2-card-label">Training set</div>
+              <div class="s2-card-val">361k</div>
+              <div class="s2-card-sub">Loan records</div>
+            </div>
+            <div class="s2-card">
+              <div class="s2-card-label">Explainability</div>
+              <div class="s2-card-val">SHAP</div>
+              <div class="s2-card-sub">Local + global</div>
+            </div>
+          </div>
+          <div class="s2-dots">
+            <div class="s2-dot" style="background:#1A56DB"></div>
+            <div class="s2-dot" style="background:rgba(255,255,255,0.15)"></div>
+            <div class="s2-dot" style="background:rgba(255,255,255,0.15)"></div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-body">
+        <div class="detail-label">3D scene</div>
+        <div class="detail-row">
+          <span class="chip-accent">Rotating DNA/helix in background</span>
+          <span class="chip-accent">Particle field behind hero text</span>
+        </div>
+        <div class="detail-label">Sections (scroll)</div>
+        <div class="detail-row">
+          <span class="chip">Hero + CTA</span>
+          <span class="chip">How it works (3-step)</span>
+          <span class="chip">Model metrics</span>
+          <span class="chip">Tech stack</span>
+        </div>
+        <div class="detail-label">Library</div>
+        <div class="detail-row">
+          <span class="chip-teal">R3F background canvas</span>
+          <span class="chip-teal">Framer Motion scroll reveal</span>
+          <span class="chip-amber">React Router v6</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-col">
+      <div class="arrow-wrap">
+        <div class="arrow-line"></div>
+        <div class="arrow-label">route push<br>/predict</div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-num">Screen 03</div>
+      <div class="screen-title">Predictor app</div>
+      <div class="preview">
+        <div class="s3-bg">
+          <div class="s3-left">
+            <div class="s3-section">Personal</div>
+            <div class="s3-field">
+              <div class="s3-input">Age: 18</div>
+              <div class="s3-input">Education</div>
+            </div>
+            <div class="s3-field">
+              <div class="s3-input">Marital status</div>
+            </div>
+            <div class="s3-section">Finance</div>
+            <div class="s3-field">
+              <div class="s3-input">Income: 500</div>
+              <div class="s3-input">Employment</div>
+            </div>
+            <div class="s3-field">
+              <div class="s3-input">Credit score: 300</div>
+            </div>
+            <div class="s3-section">Loan</div>
+            <div class="s3-field">
+              <div class="s3-input">Amount: 1,000,000</div>
+              <div class="s3-input">Term: 60</div>
+            </div>
+            <div class="s3-field">
+              <div class="s3-input">Interest: 10%</div>
+              <div class="s3-input">DTI: 0.5</div>
+            </div>
+          </div>
+          <div class="s3-right">
+            <div style="font-size:6px;color:rgba(255,255,255,0.25);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px">Risk orb · decision path</div>
+            <div class="s3-orb-wrap">
+              <div class="s3-orb"></div>
+            </div>
+            <div class="s3-score-row"><span class="s3-feat">num__Income</span><span class="s3-val">+1.13</span></div>
+            <div class="s3-score-row"><span class="s3-feat">num__Age</span><span class="s3-val">+0.52</span></div>
+            <div class="s3-score-row"><span class="s3-feat">num__LoanTerm</span><span class="s3-val-neg">-0.28</span></div>
+            <div class="s3-score-row"><span class="s3-feat">InterestRate</span><span class="s3-val-neg">-0.27</span></div>
+            <div class="s3-final">
+              <span class="s3-final-label">Final risk score</span>
+              <span class="s3-final-val">0.7815</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-body">
+        <div class="detail-label">3D upgrades from current</div>
+        <div class="detail-row">
+          <span class="chip-accent">Orb colour-shifts on score change</span>
+          <span class="chip-accent">3D SHAP bar forest behind panel</span>
+          <span class="chip-accent">Particle burst on submit</span>
+        </div>
+        <div class="detail-label">New panels</div>
+        <div class="detail-row">
+          <span class="chip">Counterfactual sliders</span>
+          <span class="chip">Fairness tab</span>
+          <span class="chip">Model info drawer</span>
+        </div>
+        <div class="detail-label">Library</div>
+        <div class="detail-row">
+          <span class="chip-teal">R3F + Drei Html overlay</span>
+          <span class="chip-amber">Framer Motion layout</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="section-label">Animation timeline</p>
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:2rem">
+    <div style="display:grid;grid-template-columns:80px 1fr;gap:8px;align-items:start">
+      <div style="font-size:10px;color:var(--color-text-tertiary)">0 – 1s</div>
+      <div style="font-size:11px;color:var(--color-text-primary)">Stars materialise · orb fades in bottom-right · vertical line drops from top</div>
+      <div style="font-size:10px;color:var(--color-text-tertiary)">1 – 2s</div>
+      <div style="font-size:11px;color:var(--color-text-primary)">Project subtitle letter-by-letter reveal · title scales up from 0.8 → 1</div>
+      <div style="font-size:10px;color:var(--color-text-tertiary)">2 – 3s</div>
+      <div style="font-size:11px;color:var(--color-text-primary)">Developer name fades in · horizontal bar draws left → right</div>
+      <div style="font-size:10px;color:var(--color-text-tertiary)">3.5 – 4s</div>
+      <div style="font-size:11px;color:var(--color-text-primary)">Whole scene zooms (R3F camera dolly) · fades to landing page</div>
+      <div style="font-size:10px;color:var(--color-text-tertiary)">Landing scroll</div>
+      <div style="font-size:11px;color:var(--color-text-primary)">Hero text stagger reveals · stat cards count up · helix rotates continuously</div>
+      <div style="font-size:10px;color:var(--color-text-tertiary)">"Launch" click</div>
+      <div style="font-size:11px;color:var(--color-text-primary)">Particle implosion into orb · React Router pushes /predict · orb expands to fill</div>
+    </div>
+  </div>
+
+  <p class="section-label">Suggested file structure</p>
+  <div class="code-block">
+src/<br>
+├── <span class="kw">scenes/</span><br>
+│   ├── <span class="fn">IntroScene.tsx</span>      <span style="color:var(--color-text-tertiary)">← R3F canvas, stars, orb</span><br>
+│   ├── <span class="fn">LandingScene.tsx</span>    <span style="color:var(--color-text-tertiary)">← background helix / particles</span><br>
+│   └── <span class="fn">PredictorScene.tsx</span>  <span style="color:var(--color-text-tertiary)">← orb + SHAP bar forest</span><br>
+├── <span class="kw">pages/</span><br>
+│   ├── <span class="fn">Intro.tsx</span>           <span style="color:var(--color-text-tertiary)">← fullscreen, auto-advance</span><br>
+│   ├── <span class="fn">Landing.tsx</span>         <span style="color:var(--color-text-tertiary)">← scroll sections</span><br>
+│   └── <span class="fn">Predictor.tsx</span>       <span style="color:var(--color-text-tertiary)">← current app, upgraded</span><br>
+├── <span class="kw">components/</span><br>
+│   ├── <span class="fn">RiskOrb.tsx</span>         <span style="color:var(--color-text-tertiary)">← score-reactive sphere</span><br>
+│   ├── <span class="fn">ShapForest.tsx</span>      <span style="color:var(--color-text-tertiary)">← 3D bar chart</span><br>
+│   └── <span class="fn">DecisionPath.tsx</span>    <span style="color:var(--color-text-tertiary)">← animated waterfall</span><br>
+└── <span class="fn">App.tsx</span>               <span style="color:var(--color-text-tertiary)">← React Router routes</span>
+  </div>
+
+</div>

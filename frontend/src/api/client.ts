@@ -43,7 +43,8 @@ export const api = {
     return response.data;
   },
 
-  predict: async (data: any): Promise<PredictionResponse> => {
+   predict: async (data: Record<string, number | string>): Promise<PredictionResponse> => {
+
     const response = await apiClient.post('/predict', data);
     return response.data;
   },
