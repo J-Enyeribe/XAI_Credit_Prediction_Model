@@ -9,7 +9,7 @@ import InfluenceMap from '../components/InfluenceMap';
 import WaterfallExplanation from '../components/WaterfallExplanation';
 import CounterfactualPanel from '../components/CounterfactualPanel';
 import FairnessDashboard from '../components/FairnessDashboard';
-import { Info, Activity, Route, ShieldCheck } from 'lucide-react';
+import { Info, Activity, Route, ShieldCheck, FileText } from 'lucide-react';
 
 interface LoanFormData {
   Age: number | string;
@@ -135,7 +135,17 @@ const Predictor: React.FC = () => {
           isPanelCollapsed ? 'w-16' : 'max-w-[400px] w-[25%] p-[var(--space-base)]'
         } h-full overflow-y-auto bg-[var(--bg-dark)] border-r [border:var(--border-thin)] z-10 transition-all duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] relative group flex-shrink-0`}
       >
-        {!isPanelCollapsed && (
+        {isPanelCollapsed ? (
+          <div className="flex flex-col items-center gap-3 pt-4">
+            <button
+              onClick={() => setIsPanelCollapsed(false)}
+              className="p-2 rounded-lg transition-all active:scale-90 bg-[var(--accent)] text-white shadow-lg"
+              aria-label="Expand form panel"
+            >
+              <FileText size={18} />
+            </button>
+          </div>
+        ) : (
           <>
             <h1 className="text-3xl font-bold mb-2 text-[var(--accent)]">XAI Credit Risk Form</h1>
             <p className="text-[var(--text-muted)] mb-[var(--space-base)] text-sm">Enter applicant details to analyze risk.</p>
