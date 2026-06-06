@@ -1,11 +1,29 @@
 @import "tailwindcss";
 
 :root {
-  --bg-dark: #1A0A06;
-  --bg-card: #431407;
-  --text-main: #FDE8DC;
-  --text-muted: #B38A7C;
-  --accent: #E25D30;
+  --bg-dark: #fafaff;
+  --bg-card: #eef0f2;
+  --text-main: #1c1c1c;
+  --text-muted: #494949;
+  --accent: #060606;
+
+  /* Compatibility variables for App.css */
+  --accent-bg: #eef0f2;
+  --accent-border: #060606;
+  --border: 1px solid rgba(28, 28, 28, 0.1);
+  --text-h: #1c1c1c;
+  --social-bg: #eef0f2;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  /* Blueprint Spacing Scale */
+  --space-tight: 0.5rem;    /* 8px - Related elements */
+  --space-base: 1.5rem;     /* 24px - Group separation */
+  --space-loose: 3rem;      /* 48px - Section separation */
+  --space-airy: 6rem;       /* 96px - Major conceptual shifts */
+
+  /* Blueprint Borders */
+  --border-thin: 1px solid rgba(28, 28, 28, 0.1);
+  --border-strong: 1px solid rgba(28, 28, 28, 0.3);
 }
 
 body {
@@ -14,20 +32,3 @@ body {
   color: var(--text-main);
   font-family: system-ui, -apple-system, sans-serif;
 }
-
-.scanline {
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(226, 93, 48, 0.05) 50%,
-    transparent 100%
-  );
-  background-size: 100% 4px;
-  animation: scan 4s linear infinite;
-}
-
-@keyframes scan {
-  from { background-position: 0 0; }
-  to { background-position: 0 100%; }
-}
-

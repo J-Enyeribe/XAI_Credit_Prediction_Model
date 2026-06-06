@@ -106,6 +106,8 @@ npm run dev
 | Endpoint             | Method | Description                                |
 | -------------------- | ------ | ------------------------------------------ |
 | `/predict`           | POST   | Returns risk score, prediction, and SHAP values |
+| `/predict/counterfactual` | POST | Generates "What-if" scenarios to flip prediction |
+| `/audit/fairness`    | GET    | Analyzes demographic bias for a specific attribute |
 | `/health`            | GET    | API health check                            |
 | `/model-info`        | GET    | Model metadata and versioning               |
 | `/global-importance` | GET    | Aggregate feature importance across dataset |
@@ -114,7 +116,7 @@ npm run dev
 
 ## 📊 Model Performance
 
-The system utilizes an optimized **XGBoost** model trained on the German Credit dataset.
+The system utilizes an optimized **XGBoost** model trained on the Loan Default Prediction Dataset.
 
 | Metric   | Value |
 | -------- | ----- |
@@ -132,7 +134,7 @@ The system utilizes an optimized **XGBoost** model trained on the German Credit 
 - [x] FastAPI backend with strict Pydantic validation
 - [x] 3D "Risk Nucleus" and "Influence Map" frontend
 - [x] "Ember Glow" high-fidelity UI theme
-- [ ] Containerization via Docker Compose
+- [x] Containerization via Docker Compose
 - [ ] Deployment to Render (Backend & Static Frontend)
 
 ---

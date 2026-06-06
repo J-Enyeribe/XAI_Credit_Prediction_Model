@@ -3,9 +3,10 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Text } from '@react-three/drei';
 import { cleanFeatureName } from '../utils/featureMapper';
+import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
 interface InfluenceMapProps {
-  explanation: Record<string, number>;
+  explanation: Record<string, number> | any;
   onFeatureClick?: (feature: string, value: number) => void;
 }
 
@@ -13,8 +14,8 @@ const Satellite = ({ feature, value, index, total, onFeatureClick }: { feature: 
   const meshRef = useRef<THREE.Mesh>(null);
   const textRef = useRef<THREE.Group>(null);
   const color = value > 0 ? '#FB923C' : '#A5B4FC'; 
-  const size = Math.abs(value) * 0.6 + 0.15;
-  const fontSize = 0.2 + Math.abs(value) * 0.2;
+  const size = Math.abs(value) * 0.8 + 0.25;
+  const fontSize = 0.35 + Math.abs(value) * 0.3;
 
   const line = useMemo(() => {
     const geometry = new THREE.BufferGeometry().setFromPoints([
@@ -29,7 +30,7 @@ const Satellite = ({ feature, value, index, total, onFeatureClick }: { feature: 
     return new THREE.Line(geometry, material);
   }, [color]);
   
-  const radius = Math.min(20, 6 + (index * 1.2) + Math.abs(value) * 2); 
+  const radius = Math.min(28, 8 + (index * 1.8) + Math.abs(value) * 2.5); 
   const speed = 0.1 + (1 / (index + 1)) * 0.1;
   const angleOffset = (index / total) * Math.PI * 2;
   
@@ -42,16 +43,13 @@ const Satellite = ({ feature, value, index, total, onFeatureClick }: { feature: 
       meshRef.current.position.set(x, 0, z);
     }
     if (textRef.current) {
-       textRef.current.position.set(x, size + 0.4, z);
-      textRef.current.lookAt(state.camera.position);
+       textRef.current.position.set(x, size + 0.8, z);
+       textRef.current.lookAt(state.camera.position);
     }
     if (line) {
       const pos = line.geometry.attributes.position.array as Float32Array;
-      // eslint-disable-next-line react-hooks/immutability
       pos[3] = x;
-      // eslint-disable-next-line react-hooks/immutability
       pos[4] = 0;
-      // eslint-disable-next-line react-hooks/immutability
       pos[5] = z;
       line.geometry.attributes.position.needsUpdate = true;
     }
@@ -60,43 +58,42 @@ const Satellite = ({ feature, value, index, total, onFeatureClick }: { feature: 
   return (
     <group>
       <primitive object={line} />
-
-  
-       <mesh 
-         ref={meshRef} 
-         onClick={(e) => {
-           e.stopPropagation();
-           onFeatureClick?.(feature, value);
-         }}
-       >
-         <sphereGeometry args={[size, 32, 32]} />
-          <meshStandardMaterial 
-            color={color} 
-            emissive={color} 
-            emissiveIntensity={8} 
-            toneMapped={false}
-          />
-
-       </mesh>
-   
-        <group ref={textRef}>
-          <Text
-            fontSize={fontSize}
-            color="#FDE8DC"
-            anchorX="center"
-            anchorY="middle"
-          >
-            {cleanFeatureName(feature)}
-          </Text>
-        </group>
-
-     </group>
+      <mesh 
+        ref={meshRef} 
+        onClick={(e) => {
+          e.stopPropagation();
+          onFeatureClick?.(feature, value);
+        }}
+      >
+        <sphereGeometry args={[size, 32, 32]} />
+        <meshStandardMaterial 
+          color={color} 
+          emissive={color} 
+          emissiveIntensity={8} 
+          toneMapped={false}
+        />
+      </mesh>
+      <group ref={textRef}>
+        <Text
+          fontSize={fontSize}
+          color="#FDE8DC"
+          anchorX="center"
+          anchorY="middle"
+        >
+          {cleanFeatureName(feature)}
+        </Text>
+      </group>
+    </group>
   );
 };
 
 const InfluenceMap: React.FC<InfluenceMapProps> = ({ explanation, onFeatureClick }) => {
   const topFeatures = useMemo(() => {
     if (!explanation) return [];
+    // Handle both Record<string, number> and the new SHAPFeature[] format
+    if (Array.isArray(explanation.top_features)) {
+      return explanation.top_features.map((f: any) => [f.feature, f.shap_value]);
+    }
     return Object.entries(explanation)
       .sort(([, a], [, b]) => Math.abs(b) - Math.abs(a))
       .slice(0, 10);
@@ -121,5 +118,3 @@ const InfluenceMap: React.FC<InfluenceMapProps> = ({ explanation, onFeatureClick
 };
 
 export default InfluenceMap;
-
-

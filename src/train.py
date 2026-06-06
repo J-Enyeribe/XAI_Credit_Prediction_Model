@@ -1,6 +1,9 @@
 import os
 os.environ["LOKY_MAX_CPU_COUNT"] = "1"
 
+# SET TO False TO RUN ALL MODELS (RandomForest, GradientBoosting, etc.)
+FAST_MODE = False 
+
 import pandas as pd
 import numpy as np
 import joblib
@@ -10,8 +13,11 @@ import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier, HistGradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 from xgboost import XGBClassifier
-from sklearn.metrics import roc_auc_score, f1_score, precision_score, recall_score, classification_report, confusion_matrix
-from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold
+from sklearn.metrics import (
+    roc_auc_score, f1_score, precision_score, recall_score, 
+    classification_report, confusion_matrix, precision_recall_curve, make_scorer, fbeta_score
+)
+from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold, learning_curve
 from sklearn.pipeline import Pipeline
 
 def train_and_evaluate():
@@ -22,6 +28,15 @@ def train_and_evaluate():
     y_test = pd.read_csv('data/processed/loan_default_y_test.csv').values.ravel()
     
     print(f"Dataset loaded. Train shape: {X_train.shape}, Test shape: {X_test.shape}")
+
+    # Calculate scale_pos_weight for XGBoost to improve recall
+    num_neg = np.sum(y_train == 0)
+    num_pos = np.sum(y_train == 1)
+    scale_weight = num_neg / num_pos
+    print(f"Calculated scale_pos_weight: {scale_weight:.2f}")
+
+    # Define F2 Scorer (Weights recall twice as heavily as precision)
+    f2_scorer = make_scorer(fbeta_score, beta=2)
 
     # Define models and their hyperparameter grids for RandomizedSearchCV
     model_configs = {
@@ -34,10 +49,10 @@ def train_and_evaluate():
         'RandomForest': {
             'model': RandomForestClassifier(random_state=42, n_jobs=-1, class_weight='balanced'),
             'params': {
-                'n_estimators': [100, 300, 500],
-                'max_depth': [None, 10, 20],
-                'min_samples_split': [2, 5, 10],
-                'max_features': ['sqrt', 'log2']
+                'n_estimators': [100],
+                'max_depth': [10, 20],
+                'min_samples_split': [5, 10],
+                'max_features': ['sqrt']
             }
         },
         'GradientBoosting': {
@@ -50,18 +65,28 @@ def train_and_evaluate():
             }
         },
         'XGBoost': {
-            'model': XGBClassifier(random_state=42, use_label_encoder=False, eval_metric='logloss', n_jobs=-1),
+            'model': XGBClassifier(
+                random_state=42, 
+                eval_metric='logloss', 
+                n_jobs=-1, 
+                scale_pos_weight=scale_weight
+            ),
             'params': {
-                'n_estimators': [100, 300],
-                'learning_rate': [0.01, 0.05, 0.1, 0.2],
-                'max_depth': [3, 5, 8],
-                'gamma': [0, 0.1, 0.2],
-                'colsample_bytree': [0.7, 0.8, 0.9, 1.0]
+                'n_estimators': [300, 500, 800],
+                'learning_rate': [0.005, 0.01, 0.05],
+                'max_depth': [3, 4, 5],
+                'min_child_weight': [1, 5, 10, 20],
+                'subsample': [0.6, 0.8, 1.0],
+                'colsample_bytree': [0.6, 0.8, 1.0],
+                'gamma': [0, 0.1, 0.5, 1.0],
+                'reg_alpha': [0, 0.1, 1.0],
+                'reg_lambda': [1, 5, 10],
             }
         }
     }
     
     # Subset for hyperparameter tuning to speed up process
+
     X_tune = X_train.sample(min(5000, len(X_train)), random_state=42)
     y_tune = y_train[X_tune.index]
     
@@ -72,6 +97,10 @@ def train_and_evaluate():
     all_results = {}
 
     for name, config in model_configs.items():
+        if FAST_MODE and name in ['RandomForest', 'GradientBoosting']:
+            print(f"\n--- Skipping {name} (FAST_MODE=True) ---")
+            continue
+            
         print(f"\n--- Optimizing {name} ---")
         
         # Calculate actual number of combinations to avoid warnings
@@ -85,7 +114,7 @@ def train_and_evaluate():
             estimator=config['model'],
             param_distributions=config['params'],
             n_iter=n_iter,
-            scoring='roc_auc',
+            scoring=f2_scorer if name == 'XGBoost' else 'roc_auc',
             cv=skf,
             verbose=1,
             random_state=42,
@@ -127,6 +156,47 @@ def train_and_evaluate():
             best_overall_name = name
 
     print(f"\n{'='*30}\nOverall Champion: {best_overall_name} (AUC={best_overall_auc:.4f})\n{'='*30}")
+    
+    # --- LEARNING CURVE DIAGNOSTIC (Priority 3) ---
+    print("Generating learning curve to diagnose model ceiling...")
+    try:
+        train_sizes, train_scores, val_scores = learning_curve(
+            best_overall_model, X_train, y_train,
+            cv=3, scoring='roc_auc',
+            train_sizes=[0.1, 0.25, 0.5, 0.75, 1.0],
+            n_jobs=-1
+        )
+        
+        plt.figure(figsize=(10, 6))
+        plt.plot(train_sizes, np.mean(train_scores, axis=1), 'o-', label='Train AUC')
+        plt.plot(train_sizes, np.mean(val_scores, axis=1), 'o-', label='Val AUC')
+        plt.xlabel('Training Set Size')
+        plt.ylabel('ROC-AUC')
+        plt.title(f'Learning Curve — {best_overall_name}')
+        plt.legend()
+        
+        os.makedirs('notebooks/plots', exist_ok=True)
+        plt.savefig('notebooks/plots/learning_curve.png')
+        plt.close()
+        print(f"Learning curve saved to notebooks/plots/learning_curve.png")
+        print(f"Final Train AUC: {np.mean(train_scores, axis=1)[-1]:.4f}")
+        print(f"Final Val AUC:   {np.mean(val_scores, axis=1)[-1]:.4f}")
+    except Exception as e:
+        print(f"Could not generate learning curve: {e}")
+
+    # --- OPTIMAL THRESHOLD DISCOVERY (Priority 1) ---
+    print("Finding optimal threshold to maximize F2-Score...")
+    probs = best_overall_model.predict_proba(X_test)[:, 1]
+    precisions, recalls, thresholds = precision_recall_curve(y_test, probs)
+    
+    # F2 = (5 * precision * recall) / (4 * precision + recall)
+    f2_scores = (5 * precisions * recalls) / (4 * precisions + recalls + 1e-8)
+    optimal_idx = np.argmax(f2_scores)
+    # thresholds array is 1 shorter than precisions/recalls
+    optimal_threshold = thresholds[optimal_idx] if optimal_idx < len(thresholds) else 0.5
+    
+    print(f"Optimal Threshold for F2: {optimal_threshold:.4f}")
+    joblib.dump(optimal_threshold, os.path.join('models', 'optimal_threshold.joblib'))
     
     # Save the champion model
     os.makedirs('models', exist_ok=True)

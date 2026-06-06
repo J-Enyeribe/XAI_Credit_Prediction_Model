@@ -8,6 +8,10 @@ env/
 venv/
 .conda/
 
+# Agent & Config
+.impeccable.md
+.opencode/
+
 # Data and Models
 data/raw/*
 !data/raw/.gitkeep
