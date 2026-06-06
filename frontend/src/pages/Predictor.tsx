@@ -7,10 +7,9 @@ import { cleanFeatureName } from '../utils/featureMapper';
 import RiskNucleus from '../components/RiskNucleus';
 import EmberParticles from '../components/EmberParticles';
 import InfluenceMap from '../components/InfluenceMap';
-import WaterfallExplanation from '../components/WaterfallExplanation';
 import CounterfactualPanel from '../components/CounterfactualPanel';
 import FairnessDashboard from '../components/FairnessDashboard';
-import { Info, Activity, Route, ShieldCheck, FileText, ArrowLeft } from 'lucide-react';
+import { Info, Activity, ShieldCheck, FileText, ArrowLeft } from 'lucide-react';
 
 interface LoanFormData {
   Age: number | string;
@@ -151,9 +150,9 @@ const Predictor: React.FC = () => {
 
       if (numericFields.includes(name)) {
         const parsed = parseFloat(value);
-        updatedData[name] = value === '' ? '' : (isNaN(parsed) ? value : parsed);
+        (updatedData as Record<string, unknown>)[name] = value === '' ? '' : (isNaN(parsed) ? value : parsed);
       } else {
-        updatedData[name] = value;
+        (updatedData as Record<string, unknown>)[name] = value;
       }
       
       return updatedData;

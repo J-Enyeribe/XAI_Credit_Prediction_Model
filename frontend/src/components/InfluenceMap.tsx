@@ -3,7 +3,6 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Text } from '@react-three/drei';
 import { cleanFeatureName } from '../utils/featureMapper';
-import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
 interface InfluenceMapProps {
   explanation: Record<string, number> | any;
@@ -97,7 +96,7 @@ const InfluenceMap: React.FC<InfluenceMapProps> = ({ explanation, onFeatureClick
       return explanation.top_features.map((f: any) => [f.feature, f.shap_value]);
     }
     return Object.entries(explanation)
-      .sort(([, a], [, b]) => Math.abs(b) - Math.abs(a))
+      .sort(([, a], [, b]) => Math.abs(b as number) - Math.abs(a as number))
       .slice(0, 10);
   }, [explanation]);
   
@@ -105,7 +104,7 @@ const InfluenceMap: React.FC<InfluenceMapProps> = ({ explanation, onFeatureClick
 
   return (
     <group>
-      {topFeatures.map(([feature, value], index) => (
+      {topFeatures.map(([feature, value]: [string, number], index: number) => (
         <Satellite 
           key={feature} 
           feature={feature} 

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { FullFairnessReport, FairnessAttributeResult } from '../api/types';
+import type { FullFairnessReport } from '../api/types';
  
 interface FairnessDashboardProps {
   report: FullFairnessReport;

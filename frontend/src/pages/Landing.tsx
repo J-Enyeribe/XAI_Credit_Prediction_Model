@@ -74,7 +74,7 @@ const Landing: React.FC = () => {
 
   const transition = prefersReducedMotion 
     ? { duration: 0 } 
-    : { duration: 0.8, ease: [0.16, 1, 0.3, 1] };
+    : { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] };
 
   return (
     <div className="relative min-h-screen w-full bg-[var(--bg-dark)] text-[var(--text-main)] overflow-x-hidden">
