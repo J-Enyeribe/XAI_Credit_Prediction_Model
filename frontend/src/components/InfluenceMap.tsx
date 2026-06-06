@@ -13,9 +13,9 @@ interface InfluenceMapProps {
 const Satellite = ({ feature, value, index, total, onFeatureClick }: { feature: string, value: number, index: number, total: number, onFeatureClick?: (feature: string, value: number) => void }) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const textRef = useRef<THREE.Group>(null);
-  const color = value > 0 ? '#FB923C' : '#A5B4FC'; 
-  const size = Math.abs(value) * 0.8 + 0.25;
-  const fontSize = 0.35 + Math.abs(value) * 0.3;
+  const color = value > 0 ? '#ff0000' : '#00b8d4'; 
+  const size = Math.abs(value) * 0.8 + 0.4;
+  const fontSize = 0.5 + Math.abs(value) * 0.35;
 
   const line = useMemo(() => {
     const geometry = new THREE.BufferGeometry().setFromPoints([
@@ -25,13 +25,13 @@ const Satellite = ({ feature, value, index, total, onFeatureClick }: { feature: 
     const material = new THREE.LineBasicMaterial({ 
       color, 
       transparent: true, 
-      opacity: 0.15 
+      opacity: 0.3 
     });
     return new THREE.Line(geometry, material);
   }, [color]);
   
-  const radius = Math.min(28, 8 + (index * 1.8) + Math.abs(value) * 2.5); 
-  const speed = 0.1 + (1 / (index + 1)) * 0.1;
+  const radius = Math.min(16, 5 + (index * 1.2) + Math.abs(value) * 1.5); 
+  const speed = 0.06;
   const angleOffset = (index / total) * Math.PI * 2;
   
   useFrame((state) => {
@@ -66,17 +66,19 @@ const Satellite = ({ feature, value, index, total, onFeatureClick }: { feature: 
         }}
       >
         <sphereGeometry args={[size, 32, 32]} />
-        <meshStandardMaterial 
+        <meshPhongMaterial 
           color={color} 
           emissive={color} 
-          emissiveIntensity={8} 
+          emissiveIntensity={3} 
+          shininess={80}
+          specular={color}
           toneMapped={false}
         />
       </mesh>
       <group ref={textRef}>
         <Text
           fontSize={fontSize}
-          color="#FDE8DC"
+          color="#1c1c1c"
           anchorX="center"
           anchorY="middle"
         >

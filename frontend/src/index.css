@@ -1,4 +1,40 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Montserrat:wght@300;400;500;700&display=swap');
+
+@theme {
+  --color-tomato-100: #410000;
+  --color-tomato-200: #820101;
+  --color-tomato-300: #c30101;
+  --color-tomato-400: #ff0000;
+  --color-tomato-500: #ff1a1a;
+  --color-tomato-600: #ff3b3b;
+  --color-tomato-700: #ff6666;
+  --color-tomato-800: #ff9999;
+  --color-tomato-900: #ffcccc;
+  --color-tomato: #ff1a1a;
+
+  --color-mustard-100: #473500;
+  --color-mustard-200: #8e6b01;
+  --color-mustard-300: #d5a001;
+  --color-mustard-400: #fec620;
+  --color-mustard-500: #fed766;
+  --color-mustard-600: #fee085;
+  --color-mustard-700: #ffe8a4;
+  --color-mustard-800: #fff0c2;
+  --color-mustard-900: #fff7e1;
+  --color-mustard: #fed766;
+
+  --color-pacific_blue-100: #002025;
+  --color-pacific_blue-200: #004049;
+  --color-pacific_blue-300: #005f6e;
+  --color-pacific_blue-400: #007f93;
+  --color-pacific_blue-500: #009fb7;
+  --color-pacific_blue-600: #00d8f9;
+  --color-pacific_blue-700: #3be5ff;
+  --color-pacific_blue-800: #7ceeff;
+  --color-pacific_blue-900: #bef6ff;
+  --color-pacific_blue: #009fb7;
+}
 
 :root {
   --bg-dark: #fafaff;
@@ -30,5 +66,18 @@ body {
   margin: 0;
   background-color: var(--bg-dark);
   color: var(--text-main);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Libre Baskerville', serif;
+}
+
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }

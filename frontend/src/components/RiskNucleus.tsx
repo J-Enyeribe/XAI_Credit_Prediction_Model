@@ -11,16 +11,15 @@ const RiskNucleus: React.FC<RiskNucleusProps> = ({ riskScore }) => {
   const ringRef = useRef<THREE.Group>(null);
   
   const getColor = (score: number) => {
-    if (score < 25) return '#22c55e'; // Low: Green
-    if (score < 50) return '#eab308'; // Mid: Yellow/Amber
-    return '#E25D30'; // High: Ember Coral
+    if (score < 25) return '#009fb7';   // Teal (0–24)
+    if (score < 50) return '#fec620';   // Yellow (25–49)
+    return '#ff0000';                    // Pure red (50–100)
   };
 
   const getIntensity = (score: number) => {
-    // Non-linear intensity: low for green, high for red
-    if (score < 25) return 0.5 + (score / 50);
-    if (score < 50) return 1.5 + (score / 100);
-    return 3.0 + (score / 50);
+    if (score < 25) return 1.5;
+    if (score < 50) return 3.0;
+    return 6.0;
   };
 
   const createArcShape = (fillPercentage: number) => {
@@ -78,7 +77,7 @@ const RiskNucleus: React.FC<RiskNucleusProps> = ({ riskScore }) => {
         {/* Background Track */}
         <mesh>
           <extrudeGeometry args={[trackShape, { depth: 0.1, bevelEnabled: false }]} />
-          <meshStandardMaterial color="#2d0a05" transparent opacity={0.5} />
+          <meshStandardMaterial color="#002025" transparent opacity={0.3} />
         </mesh>
         {/* Active Fill Arc */}
         <mesh>

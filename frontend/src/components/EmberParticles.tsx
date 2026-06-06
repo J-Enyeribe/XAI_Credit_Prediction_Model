@@ -21,6 +21,14 @@ const EmberParticles: React.FC<EmberParticlesProps> = ({ riskScore }) => {
   const particleCount = 200;
   const positions = useMemo(() => createRandomPositions(particleCount), []);
 
+  const getParticleColor = (score: number): string => {
+    if (score < 25) return '#009fb7';   // Pacific Blue
+    if (score < 50) return '#fed766';   // Mustard
+    return '#ff0000';                    // Pure red
+  };
+
+  const particleColor = getParticleColor(riskScore);
+
   useFrame((state) => {
     if (pointsRef.current) {
       const time = state.clock.getElapsedTime();
@@ -53,10 +61,10 @@ const EmberParticles: React.FC<EmberParticlesProps> = ({ riskScore }) => {
          />
        </bufferGeometry>
       <pointsMaterial 
-        size={0.05} 
-        color="#E25D30" 
+        size={0.08} 
+        color={particleColor} 
         transparent 
-        opacity={0.6} 
+        opacity={0.8} 
         blending={THREE.AdditiveBlending} 
       />
     </points>

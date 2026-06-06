@@ -35,7 +35,7 @@ const Intro: React.FC = () => {
   };
 
   return (
-    <div className="relative h-screen w-full bg-[#1A0A06] overflow-hidden">
+    <div className="relative h-screen w-full bg-[var(--bg-dark)] overflow-hidden">
       {/* 3D Background */}
       <div className="absolute inset-0 z-0">
         <Canvas camera={{ position: [0, 0, 5] }}>
@@ -53,27 +53,27 @@ const Intro: React.FC = () => {
         >
           <motion.div 
             variants={itemVariants}
-            className="text-[#B38A7C] uppercase tracking-[0.3em] text-xs mb-4 font-medium"
+            className="text-[var(--text-muted)] uppercase tracking-[0.3em] text-xs mb-4 font-medium"
           >
             Explainable AI System
           </motion.div>
           
           <motion.h1 
             variants={itemVariants}
-            className="text-5xl md:text-7xl font-bold text-[#FDE8DC] leading-tight mb-6"
+            className="text-5xl md:text-7xl font-bold text-[var(--text-main)] leading-tight mb-6"
           >
             XAI Credit<br />
-            <span className="text-[#E25D30]">Risk Prediction</span>
+            <span className="text-pacific_blue-500">Risk Prediction</span>
           </motion.h1>
 
           <motion.div 
             variants={itemVariants}
-            className="h-px w-24 bg-[#E25D30] mx-auto mb-6"
+            className="h-px w-24 bg-pacific_blue-500 mx-auto mb-6"
           />
 
           <motion.div 
             variants={itemVariants}
-            className="text-[#B38A7C] text-sm tracking-wider"
+            className="text-[var(--text-muted)] text-sm tracking-wider"
           >
             Justin Enyeribe Ndubuisi · JKUAT · 2026
           </motion.div>
@@ -81,12 +81,12 @@ const Intro: React.FC = () => {
       </div>
 
       {/* Progress bar at bottom */}
-      <div className="absolute bottom-0 left-0 h-1 bg-[#E25D30]/30 w-full">
+      <div className="absolute bottom-0 left-0 h-1 bg-pacific_blue-500/20 w-full">
         <motion.div 
           initial={{ width: 0 }}
           animate={{ width: '100%' }}
            transition={{ duration: 6, ease: 'linear' }}
-          className="h-full bg-[#E25D30]"
+          className="h-full bg-pacific_blue-500"
         />
       </div>
     </div>

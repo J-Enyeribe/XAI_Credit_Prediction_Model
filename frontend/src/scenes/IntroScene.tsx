@@ -34,8 +34,8 @@ const IntroScene: React.FC = () => {
       <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
         <Sphere ref={orbRef} args={[1, 64, 64]} position={[4, -3, -5]}>
           <meshStandardMaterial 
-            color="#E25D30" 
-            emissive="#E25D30" 
+            color="#009fb7" 
+            emissive="#009fb7" 
             emissiveIntensity={2} 
             roughness={0.1} 
             metalness={0.8} 
@@ -43,9 +43,9 @@ const IntroScene: React.FC = () => {
         </Sphere>
       </Float>
 
-      <ambientLight intensity={0.2} />
-      <pointLight position={[10, 10, 10]} intensity={1} color="#FDE8DC" />
-      <spotLight position={[-10, 10, 10]} angle={0.15} penumbra={1} intensity={1} color="#E25D30" />
+      <ambientLight intensity={0.4} />
+      <pointLight position={[10, 10, 10]} intensity={1} color="#ffffff" />
+      <spotLight position={[-10, 10, 10]} angle={0.15} penumbra={1} intensity={1} color="#009fb7" />
     </>
   );
 };

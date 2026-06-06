@@ -7,10 +7,10 @@ interface FairnessDashboardProps {
  
 const StatusBadge = ({ status }: { status: string }) => {
   const config = {
-    FAIR: { color: 'bg-emerald-600 text-white', label: 'Fair' },
-    WARNING: { color: 'bg-amber-500 text-white', label: 'Warning' },
-    BIASED: { color: 'bg-orange-600 text-white', label: 'Biased' },
-    CRITICAL: { color: 'bg-rose-600 text-white', label: 'Critical' },
+    FAIR: { color: 'bg-pacific_blue-600 text-white', label: 'Fair' },
+    WARNING: { color: 'bg-mustard-500 text-white', label: 'Warning' },
+    BIASED: { color: 'bg-tomato-500 text-white', label: 'Biased' },
+    CRITICAL: { color: 'bg-tomato-600 text-white', label: 'Critical' },
     ERROR: { color: 'bg-slate-600 text-white', label: 'Error' },
   };
   const { color, label } = config[status as keyof typeof config] || config.ERROR;
@@ -43,19 +43,19 @@ const FairnessDashboard: React.FC<FairnessDashboardProps> = ({ report }) => {
         <h4 className="text-xs font-bold text-[var(--text-muted)] uppercase mb-3">Audit Legend</h4>
         <div className="grid grid-cols-1 gap-y-2 text-[11px] text-[var(--text-muted)]">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500" />
+            <div className="w-2 h-2 rounded-full bg-pacific_blue-500" />
             <span>Fair: No significant bias detected.</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-amber-500" />
+            <div className="w-2 h-2 rounded-full bg-mustard-500" />
             <span>Warning: Mild disparity detected.</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-orange-500" />
+            <div className="w-2 h-2 rounded-full bg-tomato-500" />
             <span>Biased: Fails the 80% rule.</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-rose-500" />
+            <div className="w-2 h-2 rounded-full bg-tomato-600" />
             <span>Critical: Severe discrimination.</span>
           </div>
         </div>
