@@ -17,8 +17,7 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
-models/*
-!models/.gitkeep
+
 
 # Notebooks
 .ipynb_checkpoints
